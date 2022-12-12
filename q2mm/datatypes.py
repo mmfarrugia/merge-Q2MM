@@ -15,9 +15,7 @@ import sys
 import constants as co
 import filetypes
 
-logger = logging.getLogger(__name__)
-
-logger.log(50, "DATATYPES LOGGER")
+logger = logging.getLogger(__file__)
 
 # Row of mm3.fld where comments start.
 COM_POS_START = 96

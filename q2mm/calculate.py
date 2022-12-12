@@ -148,7 +148,6 @@ def main(args):
     # with the given file.
     # Stuff below doesn't need both comma separated filenames simultaneously.
     for filename, commands_for_filename in commands_for_filenames.items():
-        logger.log(1, "TEST")
         logger.log(1, '>>> filename: {}'.format(filename))
         logger.log(1, '>>> commands_for_filename: {}'.format(
             commands_for_filename))
@@ -1966,9 +1965,6 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
     filenames = chain.from_iterable(coms['mgeig'])
     for comma_filenames in filenames:
         name_mae, name_gau_log = comma_filenames.split(',')
-        print(str(name_mae))
-        print(str(inps[name_mae]))
-        print(str(inps[name_mae].name_log))
         name_mae_log = inps[name_mae].name_log
         mae = check_outs(name_mae, outs, filetypes.Mae, direc)
         mae_log = check_outs(name_mae_log, outs, filetypes.MacroModelLog, direc)

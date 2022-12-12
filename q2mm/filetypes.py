@@ -2783,11 +2783,6 @@ class MacroModelLog(File):
             logger.log(10, 'READING: {}'.format(self.filename))
             with open(self.path, 'r') as f:
                 lines = f.read()
-            print("re.search result")
-            print("path: "+str(self.path))
-            print(re.search('Read\s+(\d+)\s+atoms.', lines))
-            #print(re.search('Read\s+(\d+)\s+atoms.', lines).group(0))
-            #print(re.search('Read\s+(\d+)\s+atoms.', lines).group(2))
             num_atoms = int(re.search('Read\s+(\d+)\s+atoms.', lines).group(1))
             logger.log(5, '  -- Read {} atoms.'.format(num_atoms))
 
@@ -3441,7 +3436,6 @@ def detect_filetype(filename):
     return file_ob
 
 def main(args):
-
     parser = return_filetypes_parser()
     opts = parser.parse_args(args)
     file_ob = detect_filetype(opts.input)
