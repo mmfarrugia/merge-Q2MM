@@ -36,6 +36,9 @@ import compare
 import datatypes
 import filetypes
 import parameters
+import sch_util
+
+logger = logging.getLogger(__name__)
 
 # Commands where we need to load the force field.
 COM_LOAD_FF    = ['ma', 'mb', 'mt',
@@ -1060,7 +1063,8 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
         int4 = []
         if os.path.isfile("calc/geo.npy"):
             hes_geo = None
-            if np.__version__ >= '1.16.4':
+            # if np.lib.NumpyVersion(np.__version__) >= '1.16.3':
+            if np.__version__ == '1.16.4':
                 hes_geo = np.load("calc/geo.npy",allow_pickle=True)
             else:
                 hes_geo = np.load("calc/geo.npy")
@@ -1801,7 +1805,6 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
             evals, evecs = np.linalg.eigh(hess)
             datatypes.replace_minimum(evals, value=invert)
             hess = evecs.dot(np.diag(evals).dot(evecs.T))
-        datatypes.replace_minimum(hess, value=invert)
         low_tri_idx = np.tril_indices_from(hess)
         low_tri = hess[low_tri_idx]
         data.extend([datatypes.Datum(
@@ -1857,11 +1860,15 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
         hess = datatypes.check_mm_dummy(hess, hess_dummies)
         low_tri_idx = np.tril_indices_from(hess)
         low_tri = hess[low_tri_idx]
+        ints = sch_util.interation234(filename)
         data.extend([datatypes.Datum(
                     val=e,
                     com='mh',
                     typ='h',
                     src_1=mae.filename,
+                    atm_1=int((x) // 3 + 1),
+                    atm_2=int((y) // 3 + 1),
+                    wht=sch_util.wht(int((x) // 3 + 1), int((y) // 3 + 1),ints),
                     idx_1=x + 1,
                     idx_2=y + 1)
                      for e, x, y in zip(
@@ -2128,7 +2135,8 @@ def collect_structural_data_from_amber_geo(
     data.extend(struct.select_data(
             typ,
             com=com,
-            src_1=name_geo))
+            src_1=name_xyz,
+            idx_2=1))
     return(data)
 def collect_structural_data_from_amber_ene(
     name_xyz, inps, outs, direc, com, ind, typ, idx_1 = None):
@@ -2148,14 +2156,16 @@ def collect_structural_data_from_amber_ene(
         new_datum = (datatypes.Datum(
             val=energy,
             typ=typ,
-            src_1=name_ene,
-            idx_1=idx_1 + 1))
+            src_1=name_xyz,
+            idx_1=idx_1 + 1,
+            idx_2=1))
         return(new_datum)
     else:
         data.extend(struct.select_data(
             typ,
             com=com,
-            src_1=name_ene))
+            src_1=name_xyz,
+            idx_2=1))
         return(data)
 
 

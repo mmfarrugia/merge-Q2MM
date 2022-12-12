@@ -368,6 +368,13 @@ class AmberLeap_Gaus(File):
                     'geo':True}
         return com_opts
 
+#BUG: 'fixatomorder' is removed in Himani's version of q2mm_kk, this is correct
+# 'fixatomorder' command is removed because it causes mismatches between the line
+# numbers of atoms, thus producing nonsensical bond lengths in the output .geo files.
+# This was pinpointed by Mikaela and Himani on 11/28/22 and running without this command
+# does not crash, produce errors, or result in nonsensical bonds.  It must be removed for
+# the gaussian (reference) version of this script as well ~line 597.
+
     def extract(self,log):
         script="""
 trajin calc/gaus.NAME.nc
@@ -581,6 +588,13 @@ class AmberLeap(File):
             com_opts['tors'] = True
         return com_opts
     def extract(self,log):
+#BUG: 'fixatomorder' is removed in Himani's version of q2mm_kk, this is correct
+# 'fixatomorder' command is removed because it causes mismatches between the line
+# numbers of atoms, thus producing nonsensical bond lengths in the output .geo files.
+# This was pinpointed by Mikaela and Himani on 11/28/22 and running without this command
+# does not crash, produce errors, or result in nonsensical bonds.  It must be removed for
+# the gaussian (reference) version of this script as well ~line 378.
+
         script="""
 trajin calc/amber.NAME.nc
 fixatomorder
