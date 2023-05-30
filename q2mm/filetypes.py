@@ -25,6 +25,7 @@ from argparse import RawTextHelpFormatter
 from string import digits
 import logging
 import mmap
+import string
 import numpy as np
 import math
 import os
@@ -2378,8 +2379,9 @@ class JaguarOut(File):
                                 co.RE_FLOAT), line)
                         if match != None:
                             current_atom = Atom()
+                            translation = str.maketrans(string.digits)
                             current_atom.element = match.group(1).translate(
-                                None, digits)
+                                translation)
                             current_atom.x = float(match.group(2))
                             current_atom.y = float(match.group(3))
                             current_atom.z = float(match.group(4))
