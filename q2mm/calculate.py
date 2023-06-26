@@ -1796,6 +1796,7 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
                             idx_1=idx_1 + 1,
                             atm_1=atom.index))
     # JAGUAR HESSIAN
+    # invert reforms modified Hessian with inverted min eigenvalue < 0 via 1999 method
     filenames = chain.from_iterable(coms['jh'])
     for filename in filenames:
         jin = check_outs(filename, outs, filetypes.JaguarIn, direc)
@@ -1817,6 +1818,7 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
                      for e, x, y in zip(
                     low_tri, low_tri_idx[0], low_tri_idx[1])])
     # GAUSSIAN HESSIAN
+    # invert reforms modified Hessian with inverted min eigenvalue < 0 via 1999 method
     filenames = chain.from_iterable(coms['gh'])
     for filename in filenames:
         log = check_outs(filename, outs, filetypes.GaussLog, direc)
@@ -1874,6 +1876,8 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
                      for e, x, y in zip(
                     low_tri, low_tri_idx[0], low_tri_idx[1])])
     # JAGUAR EIGENMATRIX
+    # based on 2015 method with direct eigenvalue comparison ignoring min eigenvalue < 0
+    # QM eigenvalues/eigenmatrix obtained by multiplying QM eigenvectors with QM Hessian
     filenames = chain.from_iterable(coms['jeigz'])
     for comma_sep_filenames in filenames:
         name_in, name_out = comma_sep_filenames.split(',')
@@ -1915,6 +1919,8 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
                      for e, x, y in zip(
                     low_tri, low_tri_idx[0], low_tri_idx[1])])
     # GAUSSIAN EIGENMATRIX
+    # based on 2015 method with direct eigenvalue comparison ignoring min eigenvalue < 0
+    # eigenvalues/eigenmatrix obtained from Gaussian log file
     filenames = chain.from_iterable(coms['geigz'])
     for filename in filenames:
         log = check_outs(filename, outs, filetypes.GaussLog, direc)
@@ -1934,6 +1940,8 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
                      for e, x, y in zip(
                     low_tri, low_tri_idx[0], low_tri_idx[1])])
     # MACROMODEL EIGENMATRIX USING JAGUAR EIGENVECTORS
+    # based on 2015 method with direct eigenvalue comparison ignoring min eigenvalue < 0
+    # MM eigenvalues obtained by multiplying QM eigenvectors with MM Hessian
     filenames = chain.from_iterable(coms['mjeig'])
     for comma_sep_filenames in filenames:
         name_mae, name_out = comma_sep_filenames.split(',')
@@ -1969,6 +1977,8 @@ def collect_data(coms, inps, direc='.', sub_names=['OPT'], invert=None):
                      for e, x, y in zip(
                     low_tri, low_tri_idx[0], low_tri_idx[1])])
     # MACROMODEL EIGENMATRIX USING GAUSSIAN EIGENVECTORS
+    # based on 2015 method with direct eigenvalue comparison ignoring min eigenvalue < 0
+    # MM eigenvalues obtained by multiplying QM eigenvectors with MM Hessian
     filenames = chain.from_iterable(coms['mgeig'])
     for comma_filenames in filenames:
         name_mae, name_gau_log = comma_filenames.split(',')
